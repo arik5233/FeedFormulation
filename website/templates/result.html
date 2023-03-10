@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+<!-- {% block head %}
+{% endblock %} -->
+{% block title %}Calculate{% endblock %}
+{% block content %}
+<br>
+
+<h1 align="center">Calculated Feed</h1>
+
+<br>
+<div>
+    
+    {% for i in range(q)%}
+        <p>{{ available_feeds[i] }} - {{ result[i] }}%</p>
+    {% endfor %}
+    
+</div>
+{% endblock %}

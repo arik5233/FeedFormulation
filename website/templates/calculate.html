@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+<!-- {% block head %}
+{% endblock %} -->
+{% block title %}Calculate{% endblock %}
+{% block content %}
+    <br>
+    <h1 align="center">Calculate Here</h1>
+      
+    <form method="POST">
+    <br>
+    <fieldset class="form-control" style="height: max-content;">
+    <label for="animal-dropdown">Select animal</label>
+    <select class="form-control" data-live-search="true" id="animal-dropdown" name="animal-dropdown">
+        <option value="" selected disabled hidden>Choose here</option>
+        <option id="Cow" value="cow">Cow</option>
+        <option id="Goat" value="goat">Goat</option>
+    </select>
+    </fieldset>
+
+    <br>
+
+    <fieldset class="form-control" style="height: max-content;">
+    <label for="age-dropdown">Select age</label>
+    <select class="form-control" data-live-search="true" name="age-dropdown" id="age-dropdown">
+        <option value="" selected disabled hidden>Choose here</option>
+        <option value="1" name="age" >1</option>
+        <option value="2" name="age" >2</option>
+        <option value="3" name="age" >3</option>
+        <option value="4" name="age" >4</option>
+        <option value="5" name="age" >5</option>
+        <option value="6" name="age" >6</option>
+        <option value="7" name="age" >7</option>
+    </select>
+    </fieldset>
+    <br>
+    <div id="availableFeedContainer" style="width: auto; height:auto; align-items: center; padding: 2%"
+        oninput="">
+        <fieldset class="form-control" style="height: max-content;" id="available-feeds">
+            <legend>Select Available Feeds</legend>
+            {% for each in data.all %}
+                <input id="{{ each }}" name="available-feeds" type="checkbox" value="{{ each.lower() }}"/>
+                <label for="{{ each }}"> {{ each }}</label><br>
+            {% endfor %}
+        </fieldset>
+    </div>
+
+    <input class="btn btn-primary" type="submit" value="Submit" style="width:50%; height:2.5em; position: relative; left: 25%; margin-bottom: 1em;">
+    <hr>    
+</form>
+    
+
+{% endblock %}

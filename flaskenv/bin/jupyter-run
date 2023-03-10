@@ -1,0 +1,10 @@
+#!/bin/sh
+'''exec' "/Users/ashifulhaque/Library/CloudStorage/GoogleDrive-md.ashiful.haque@g.bracu.ac.bd/My Drive/BRAC Courses/9th Semester /CSE470 (9-JCH)/Project /FeedFormulation/flaskenv/bin/python" "$0" "$@"
+' '''
+# -*- coding: utf-8 -*-
+import re
+import sys
+from jupyter_client.runapp import RunApp
+if __name__ == '__main__':
+    sys.argv[0] = re.sub(r'(-script\.pyw|\.exe)?$', '', sys.argv[0])
+    sys.exit(RunApp.launch_instance())
