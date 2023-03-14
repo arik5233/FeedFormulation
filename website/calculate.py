@@ -38,19 +38,19 @@ requirements = {'cow':[18.1814, 2762.515, 2.8251400000000007, 4.08008, 3.52272, 
 def calculate_feed(animal, age, available_feed):
     requirement = requirements[animal]
     available_feed1 = []
-    q = len(available_feed)
+    length = len(available_feed)
     for x in available_feed:
-        available_feed1.append(db[x][:q])
+        available_feed1.append(db[x][:length])
     available_feed = np.array(available_feed1)
-    goat1 = requirement[:q]
+    goat1 = requirement[:length]
     requirement = np.array(goat1)
     transposed_available_feed = np.transpose(available_feed)
     inv_transposed_available_feed = np.linalg.pinv(transposed_available_feed)
     transposed_goat = np.transpose(requirement)
     output = np.dot(inv_transposed_available_feed, transposed_goat)
-    output = output*100
+    output = output * 100
     result = []
     for x in output:
         result.append(round(x, 2))
     # print(output)
-    return result, q
+    return result, length

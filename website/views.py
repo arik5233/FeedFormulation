@@ -12,13 +12,13 @@ def home():
 
 @views.route('/calculate', methods=['GET', 'POST'])
 def calculate():
-    global available_feeds, result, q
+    global available_feeds, result, length
     if request.method == 'POST':
         animal = request.form.get('animal-dropdown')
         age = request.form.get('age-dropdown')
         available_feeds = request.form.getlist('available-feeds')
         print(animal, age, available_feeds)
-        result, q = calculate_feed(animal, age, available_feeds)
+        result, length = calculate_feed(animal, age, available_feeds)
         print(result)
         return redirect(url_for('views.result'))
 
@@ -26,4 +26,4 @@ def calculate():
 
 @views.route('/result')
 def result():
-    return render_template("result.html", user=current_user, result=result, available_feeds=available_feeds, q=q)
+    return render_template("result.html", user=current_user, result=result, available_feeds=available_feeds, length=length)
