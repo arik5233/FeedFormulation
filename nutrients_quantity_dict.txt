@@ -905,7 +905,7 @@
         "valine_total": 0.34,
         "valine_digestible": 0.34
     },
-    "salt_NaCl": {
+    "salt_nacl": {
         "dry_matter": 99.0,
         "crude_protein": null,
         "fat_ether_extract": null,

@@ -7,6 +7,7 @@ np.set_printoptions(suppress=True)
 nutrients_quantity_dict = json.load(open('nutrients_quantity_dict.txt'))
 requirements = json.load(open('requirements_dict.txt'))
 
+
 def generateMatrix(kind, available_feed):
     A = []
     b = []
@@ -20,11 +21,13 @@ def generateMatrix(kind, available_feed):
         A.append(temp)
     return A, b
 
-def calculate_feed(animal, age, available_feed):
+def calculate_feed(kind, available_feed):
     # Ax=b
-    A, b= generateMatrix('peaking', available_feed)
+    A, b= generateMatrix(kind, available_feed)
     A = np.array(A)
+    A = A.astype(float)
     b = np.array(b[:len(A[0])])
+    b = b.astype(float)
     # print('Original -> ', A.shape, b.shape)
     transposed_A = np.transpose(A)
     transposed_b = np.transpose(b)
@@ -32,6 +35,9 @@ def calculate_feed(animal, age, available_feed):
     inv_A = np.linalg.pinv(transposed_A)
     output = np.dot(inv_A, transposed_b)
     output = output * 100
+    for x in range(len(output)):
+        if output[x] < 0:
+            output[x] = 0
     # print(output)
     # print(len(A[0]))
     # print(matrix)
@@ -50,6 +56,8 @@ def calculate_feed(animal, age, available_feed):
     # output = output * 100
     result = []
     for x in output:
-        result.append(round(x/(sum(output)/100), 2))
-    return result
-print(calculate_feed('goat', 1, ['barley_grain', 'peanut_meal_solvent', 'soybeans_full_fat_cooked']))
+        val = round(x/(sum(output)/100), 2)
+        result.append(val)
+        length = len(result)
+    return result, length
+# print(calculate_feed('peaking', ['barley_grain', 'peanut_meal_solvent', 'soybeans_full_fat_cooked']))

@@ -1,9 +1,46 @@
 {% extends "base.html" %}
 {% block title %}Home{% endblock %}
 {% block content %}
-    <h1 align="center">Welcome to the Home Page</h1>
-    <h3 align="center">You are signed in.</h3>
+<h1 align="center">Welcome to the Home Page</h1>
+<h3 align="center">You are signed in.</h3>
+{% for user in users %}
+<div class="container" style="border: 1px solid rgb(103, 103, 103)">
+    <br>
+    <div class="row">
+        <div class="col-md-1">
+            <p><b>{{ user.id }}{{ user.first_name }}</b></p>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-md-1">
+            <p><b>Email</b> {{ user.email }}</p>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-md-1">
+            <p><b>Contact</b> {{ user.phone }}</p>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-md-1">
+            <p><b>Address</b> {{ user.address }}</p>
+        </div>
+    </div>
+</div>
+<br>
 
+
+
+
+
+
+{% endfor %}
+{% endblock %}
+{% block name %}
+{{ name }}
 {% endblock %}
 
 <!-- <form method="POST">
