@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template , request, flash, redirect, url_for
 from flask_login import login_required, current_user
 from .models import User
-from . import data as data
+from . import db
 from .calculate import calculate_feed
 import json
 
@@ -48,3 +48,19 @@ def result():
     name = current_user.first_name
 
     return render_template("result.html", user=current_user, result=result, available_feeds=available_feeds, length=length, name=name)
+
+@views.route('/profile', methods=['GET', 'POST'])
+@login_required
+def profile():
+    if current_user.is_authenticated:
+        user = User.query.filter_by(id=current_user.id).first()
+        if request.method == 'GET':
+            return render_template("updateProfile.html", user=current_user, name=current_user.first_name, obj=current_user)
+        elif request.method == 'POST':
+            user.first_name = request.form.get('first_name')
+            user.last_name = request.form.get('last_name')
+            user.contact_num = request.form.get('contact_num')
+            user.address = request.form.get('address')
+            db.session.commit()
+            flash('Profile Updated Successfully!', category='success')
+            return redirect(url_for('views.profile'))

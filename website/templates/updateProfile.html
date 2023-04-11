@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Profile{% endblock %}
+{% if user.is_authenticated %}
+    {% block name %}
+        {{ obj.first_name }}
+    {% endblock %}
+{% endif %}
+{% block content %}
+<form method="POST">
+    <br>
+    <h3 align="center">Personal Information</h3>
+    <br>
+    <div class="form-group">
+        <label for="first_name"><b>First Name</b></label>
+        <input type="text" class="form-control" id="first_name" name="first_name" value="{{obj.first_name}}">
+        <br>
+        <label for="last_name"><b>Last Name</b></label>
+        <input type="text" class="form-control" id="last_name" name="last_name" value="{{obj.last_name}}">
+        <br>
+        <label for="email"><b>Email Address</b></label>
+        <input type="email" class="form-control" id="email" name="email" value="{{obj.email}}" disabled>
+        <br>
+        <label for="contact_num"><b>Contact Number</b></label>
+        <input type="text" class="form-control" id="contact_num" name="contact_num" value="{{obj.contact_num}}">
+        <br>
+        <label for="address"><b>Address</b></label>
+        <input type="text" class="form-control" id="address" name="address" value="{{obj.address}}">
+        <br>
+    </div>
+    <button type="submit" class="btn btn-primary">SAVE</button>
+</form>
+{% endblock %}
