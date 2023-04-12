@@ -41,13 +41,13 @@ def calculate():
         return redirect(url_for('views.result'))
     if current_user.is_authenticated:
         return render_template("calculate.html", user=current_user, data=all_feeds, name=current_user.first_name)
-    return render_template("calculate.html", user=current_user, data=all_feeds)
+    return render_template("calculate.html", user=current_user, data=all_feeds, name='Guest')
 
 @views.route('/result')
 def result():
-    name = current_user.first_name
-
-    return render_template("result.html", user=current_user, result=result, available_feeds=available_feeds, length=length, name=name)
+    if current_user.is_authenticated:
+        return render_template("result.html", user=current_user, result=result, available_feeds=available_feeds, length=length, name=current_user.first_name)
+    return render_template("result.html", user=current_user, result=result, available_feeds=available_feeds, length=length)
 
 @views.route('/profile', methods=['GET', 'POST'])
 @login_required
@@ -57,6 +57,12 @@ def profile():
         if request.method == 'GET':
             return render_template("updateProfile.html", user=current_user, name=current_user.first_name, obj=current_user)
         elif request.method == 'POST':
+            # if post action delete is pressed, delete the user
+            if request.form.get('action') == 'delete':
+                db.session.delete(user)
+                db.session.commit()
+                flash('Profile Deleted Successfully!', category='success')
+                return redirect(url_for('auth.login'))
             user.first_name = request.form.get('first_name')
             user.last_name = request.form.get('last_name')
             user.contact_num = request.form.get('contact_num')
@@ -64,3 +70,4 @@ def profile():
             db.session.commit()
             flash('Profile Updated Successfully!', category='success')
             return redirect(url_for('views.profile'))
+        
