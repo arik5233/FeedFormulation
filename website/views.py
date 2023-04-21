@@ -18,36 +18,56 @@ def home():
 
 @views.route('/calculate', methods=['GET', 'POST'])
 def calculate():
-    global available_feeds, result, length
+    global available_feeds, result, length, prices
     all_feeds = nutrients_quantity_dict.keys()
 # 'peaking', 'layer_2', 'layer_3', 'layer_4', 'layer_5'
     if request.method == 'POST':
-        animal = request.form.get('animal-dropdown')
-        age = int(request.form.get('age-dropdown'))
-        available_feeds = request.form.getlist('available-feeds')
-        if 0 < age <= 35:
-            kind = 'peaking'
-        elif 35 < age <= 45:
-            kind = 'layer_2'
-        elif 45 < age <= 60:
-            kind = 'layer_3'
-        elif 60 < age <= 72:
-            kind = 'layer_4'
-        elif 72 < age <= 100:
-            kind = 'layer_5'
-        # print(animal, age, available_feeds)
-        result, length = calculate_feed(kind, available_feeds)
-        flash('Calculation completed Successfully!', category='success')
-        return redirect(url_for('views.result'))
+        
+        try:
+            age = int(request.form.get('age-dropdown'))
+            animal = request.form.get('animal-dropdown')
+            available_feeds = request.form.getlist('available-feeds')
+            prices = [float(x) for x in request.form.getlist('price_container') if x != '']
+            if len(prices) != len(available_feeds):
+                flash('Please enter price for all the feeds!', category='error')
+                return redirect(url_for('views.calculate'))
+            if 0 < age <= 35:
+                kind = 'peaking'
+            elif 35 < age <= 45:
+                kind = 'layer_2'
+            elif 45 < age <= 60:
+                kind = 'layer_3'
+            elif 60 < age <= 72:
+                kind = 'layer_4'
+            elif 72 < age <= 100:
+                kind = 'layer_5'
+            
+            result, length = calculate_feed(kind, available_feeds)
+            
+            print(available_feeds, prices)
+            flash('Calculation completed Successfully!', category='success')
+            return redirect(url_for('views.result'))
+        except TypeError:
+            flash('Please enter a valid age!', category='error')
+        except UnboundLocalError:
+            flash('Please select an animal!', category='error')
+        
+        
     if current_user.is_authenticated:
         return render_template("calculate.html", user=current_user, data=all_feeds, name=current_user.first_name)
     return render_template("calculate.html", user=current_user, data=all_feeds, name='Guest')
 
 @views.route('/result')
 def result():
+    costs = []
+    # print(available_feeds, prices, result, length)
+    for x in range(len(available_feeds)):
+        costs.append(round((result[x]/100) * prices[x], 2))
+
+
     if current_user.is_authenticated:
-        return render_template("result.html", user=current_user, result=result, available_feeds=available_feeds, length=length, name=current_user.first_name)
-    return render_template("result.html", user=current_user, result=result, available_feeds=available_feeds, length=length)
+        return render_template("result.html", user=current_user, result=result, available_feeds=available_feeds, length=length, prices=prices, costs=costs, total_cost=sum(costs), name=current_user.first_name)
+    return render_template("result.html", user=current_user, result=result, available_feeds=available_feeds, length=length, prices=prices, costs=costs, total_cost=sum(costs))
 
 @views.route('/profile', methods=['GET', 'POST'])
 @login_required

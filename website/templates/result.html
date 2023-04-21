@@ -11,11 +11,28 @@
 <h1 align="center">Calculated Feed</h1>
 
 <br>
-<div>
-    
-    {% for i in range(length)%}
-        <p>{{ available_feeds[i] }} - {{ result[i] }}%</p>
-    {% endfor %}
-    
+<div class="form-control" style="width: auto; height:auto; align-items: center; padding: 2%">
+    <fieldset data-live-search="true" style="height: max-content;" id="feeds">
+        <legend>Feed Percentage</legend>
+        {% for i in range(length)%}
+        <p class="form-control">{{ available_feeds[i] }} - {{ result[i] }}%</p>
+        {% endfor %}
+    </fieldset>
 </div>
+<hr>
+<div class="form-control" style="width: auto; height:auto; align-items: center; padding: 2%">
+    <fieldset data-live-search="true" style="height: max-content;" id="feeds">
+        <legend>For 1 kg feed:</legend>
+        {% for i in range(length)%}
+        <p class="form-control">{{ available_feeds[i] }} - {{ "%0.2f" | format(result[i]*10 | float) }} gm - {{ "%0.2f" | format(costs[i] | float) }} TK</p>
+        {% endfor %}
+
+    </fieldset>
+    <fieldset>
+        <legend>Total Cost</legend>
+        <p class="form-control">{{ total_cost }} TK</p>
+    </fieldset>
+
+</div>
+
 {% endblock %}

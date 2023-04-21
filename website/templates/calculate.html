@@ -17,7 +17,7 @@
         <label for="animal-dropdown">Select animal</label>
         <select class="form-control" data-live-search="true" id="animal-dropdown" name="animal-dropdown">
             <option value="" selected disabled hidden>Choose here</option>
-            <option id="Cow" value="cow">Hen</option>
+            <option id="hen" value="hen">Hen</option>
             <!-- <option id="Goat" value="goat">Goat</option> -->
         </select>
     </fieldset>
@@ -41,44 +41,26 @@
         </select>
     </fieldset>
     <br>
-    <div id="availableFeedContainer" style="width: auto; height:auto; align-items: center; padding: 2%" oninput="">
-        <fieldset class="form-control" style="height: max-content;" id="available-feeds">
+    <div class="form-control" id="availableFeedContainer" style="width: auto; height:auto; align-items: center; padding: 2%">
+        <fieldset class="form-control" data-live-search="true" style="height: max-content;" id="available-feeds">
             <legend>Select Available Feeds</legend>
             {% for each in data %}
             <div class="grid gap-3">
-                <div class="p-2 g-col-6">
-                    <input id="{{ each }}" name="available-feeds" type="checkbox" value="{{ each }}"/>
+
+                <div class="p-2 g-col-6" style="width: 50%; float: left; padding: 20px;">
+                    <input id="{{ each }}" name="available-feeds" type="checkbox" value="{{ each }}" onclick="myFunc('{{ each }}')"/>
                     <label for="{{ each }}">{{ each }}</label>
                 </div>
-                <div class="p-2 g-col-6">
-                    <label for="price_{{ each }}"> Price</label>
-                    <input type="text" id="price_{{ each }}" name="price" value="0">
-                    <hr>
+
+                <div class="p-2 g-col-6" id="prices" style="width: 50%; float: left; padding: 20px;">
+                    <label for="price_{{ each }}"> Price/kg: </label>
+                    <input type="text" id="price_{{ each }}" name="price_container" value="">
                 </div>
+
             </div>
-            <!-- <script>
-                $(function validate() {
-
-                    // Get the form fields and hidden div
-                    var checkbox = $("#{{ each }}");
-                    var hidden = $("#price_{{ each }}");
-                    // var populate = $("#populate");
-
-                    hidden.hide();
-                    checkbox.change(function () {
-                        if (checkbox.is(':checked')) {
-                            hidden.show();
-                        } else {
-                            hidden.hide();
-                        }
-                    });
-                });
-            </script> -->
-
             {% endfor %}
         </fieldset>
     </div>
-
 
 
 
