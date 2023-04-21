@@ -5,7 +5,8 @@ from . import db
 from .calculate import calculate_feed
 import json
 
-nutrients_quantity_dict = json.load(open('nutrients_quantity_dict.txt'))
+nutrients_quantity_dict = {}
+nutrients_quantity_dict['hen'] = json.load(open('nutrients_quantity_dict.txt'))
 
 views = Blueprint('views', __name__)
 
@@ -18,15 +19,14 @@ def home():
 
 @views.route('/calculate', methods=['GET', 'POST'])
 def calculate():
-    global available_feeds, result, length, prices
-    all_feeds = nutrients_quantity_dict.keys()
+    global available_feeds, result, length, prices, animal
+    
 # 'peaking', 'layer_2', 'layer_3', 'layer_4', 'layer_5'
     if request.method == 'POST':
-        
         try:
             age = int(request.form.get('age-dropdown'))
-            animal = request.form.get('animal-dropdown')
             available_feeds = request.form.getlist('available-feeds')
+            animal = request.form.get('animal-dropdown')
             prices = [float(x) for x in request.form.getlist('price_container') if x != '']
             if len(prices) != len(available_feeds):
                 flash('Please enter price for all the feeds!', category='error')
@@ -51,8 +51,8 @@ def calculate():
             flash('Please enter a valid age!', category='error')
         except UnboundLocalError:
             flash('Please select an animal!', category='error')
-        
-        
+    all_feeds = nutrients_quantity_dict['hen'].keys()
+
     if current_user.is_authenticated:
         return render_template("calculate.html", user=current_user, data=all_feeds, name=current_user.first_name)
     return render_template("calculate.html", user=current_user, data=all_feeds, name='Guest')
