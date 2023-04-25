@@ -114,8 +114,8 @@ def user_profile(id):
         user.rating = int(rating)
         db.session.commit()
         flash('Review Submitted Successfully!', category='success')
-
-        return redirect(url_for('views.home', user=current_user, name=current_user.first_name, obj=user))
+        return render_template("wall_norating.html", user=current_user, name=current_user.first_name, obj=user)
+        # return redirect(url_for('views.user_profile', user=current_user, name=current_user.first_name, obj=user))
 
         
     return render_template("wall.html", user=current_user, name=current_user.first_name, obj=user)

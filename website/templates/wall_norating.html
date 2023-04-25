@@ -1,0 +1,44 @@
+{% extends "base.html" %} {% block title %}Profile{% endblock %} {% if
+user.is_authenticated %} {% block name %} {{ obj.first_name }} {% endblock %} {%
+endif %} {% block head %}
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+{% endblock %}
+{% block content %}
+<br />
+<h3 align="center">Veterenarian Information</h3>
+<br />
+<form action="#" method="post">
+    <div class="form-group">
+        <fieldset>
+            <label for="name">
+                <b>Name: </b>
+            </label>
+            <p class="form-control" id="name">{{obj.first_name}} {{obj.last_name}}</p>
+
+            <label for="email">
+                <b>Email: </b>
+            </label>
+
+            <p class="form-control" id="email">{{obj.email}}</p>
+
+            <label for="conatact_no">
+                <b>Contact No: </b>
+            </label>
+            <p class="form-control" id="conatact_no">{{obj.contact_num}}</p>
+
+            <label for="address">
+                <b>Address: </b>
+            </label>
+            <p class="form-control" id="address">{{obj.address}}</p>
+
+            <label for="rating">
+                <b>Rating: </b>
+            </label>
+
+            <p class="form-control" id="rating">{{obj.rating}}</p>
+            <br /><br />
+        </fieldset>
+    </div>
+</form>
+
+{% endblock %}
