@@ -28,9 +28,19 @@ def calculate():
             available_feeds = request.form.getlist('available-feeds')
             animal = request.form.get('animal-dropdown')
             prices = [float(x) for x in request.form.getlist('price_container') if x != '']
-            if len(prices) != len(available_feeds):
-                flash('Please enter price for all the feeds!', category='error')
+            if len(available_feeds) == 0:
+                flash('Please select at least one feed!', category='error')
                 return redirect(url_for('views.calculate'))
+            if animal == None:
+                flash('Please select an animal first!', category='error')
+                return redirect(url_for('views.calculate'))
+            if len(prices) != len(available_feeds):
+                if len(prices) < len(available_feeds):
+                    flash('Please enter price for all the feeds!', category='error')
+                    return redirect(url_for('views.calculate'))
+                else:
+                    flash('Feed not selected for given price!', category='error')
+                    return redirect(url_for('views.calculate'))
             if 0 < age <= 35:
                 kind = 'peaking'
             elif 35 < age <= 45:
@@ -90,4 +100,22 @@ def profile():
             db.session.commit()
             flash('Profile Updated Successfully!', category='success')
             return redirect(url_for('views.profile'))
+
+@views.route('/vet/<int:id>', methods=['GET', 'POST'])
+@login_required
+def user_profile(id):
+    user = User.query.filter_by(id=id).first()
+    if user==current_user:
+        return redirect(url_for('views.profile'))
+    # if method is post, then retrieve the rating
+    if request.method == 'POST':
+        rating = request.form.get('rate')
+        # add rating to the user
+        user.rating = int(rating)
+        db.session.commit()
+        flash('Review Submitted Successfully!', category='success')
+
+        return redirect(url_for('views.home', user=current_user, name=current_user.first_name, obj=user))
+
         
+    return render_template("wall.html", user=current_user, name=current_user.first_name, obj=user)
