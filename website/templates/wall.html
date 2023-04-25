@@ -13,7 +13,7 @@ endif %} {% block head %}
 
             var selected_value = $(this).attr("data-attr");
             $("#selected_rating").val(selected_value);
-            console.log(selected_value);
+
             $(".selected-rating").empty();
             $(".selected-rating").html(selected_value);
 
@@ -37,10 +37,6 @@ endif %} {% block head %}
         btn.disabled = true;
         container = document.getElementById("rating_container");
         container.hidden = false;
-    }
-    function pass_val(){
-        var x = document.getElementById("selected_rating").value;
-        document.getElementById("rating_val").value = x;
     }
 </script>
 <style>
@@ -80,7 +76,7 @@ endif %} {% block head %}
                 <b>Rating: </b>
             </label>
 
-            <p class="form-control" id="rating">4.5</p>
+            <p class="form-control" id="rating">{{obj.rating}}</p>
 
             <button class="btn btn-secondary" type="button" id="rating_btn" onclick="ratingg()">
                 Review
@@ -96,19 +92,24 @@ endif %} {% block head %}
                     <h2 class="bold rating-header" style="">
                         <span class="selected-rating">0</span><small> / 5</small>
                     </h2>
-                    <button name="rate" type="submit" class="btnrating btn btn-default btn-lg" data-attr="1" id="rating-star-1" value="1" onclick="">
+                    <button name="rate" type="submit" class="btnrating btn btn-default btn-lg" data-attr="1"
+                        id="rating-star-1" value="1" onclick="">
                         <i class="fa fa-star" aria-hidden="true"></i>
                     </button>
-                    <button name="rate" type="submit" class="btnrating btn btn-default btn-lg" data-attr="2" id="rating-star-2" value="2" onclick="">
+                    <button name="rate" type="submit" class="btnrating btn btn-default btn-lg" data-attr="2"
+                        id="rating-star-2" value="2" onclick="">
                         <i class="fa fa-star" aria-hidden="true"></i>
                     </button>
-                    <button name="rate" type="submit" class="btnrating btn btn-default btn-lg" data-attr="3" id="rating-star-3" value="3" onclick="">
+                    <button name="rate" type="submit" class="btnrating btn btn-default btn-lg" data-attr="3"
+                        id="rating-star-3" value="3" onclick="">
                         <i class="fa fa-star" aria-hidden="true"></i>
                     </button>
-                    <button name="rate" type="submit" class="btnrating btn btn-default btn-lg" data-attr="4" id="rating-star-4" value="4" onclick="">
+                    <button name="rate" type="submit" class="btnrating btn btn-default btn-lg" data-attr="4"
+                        id="rating-star-4" value="4" onclick="">
                         <i class="fa fa-star" aria-hidden="true"></i>
                     </button>
-                    <button name="rate" type="submit" class="btnrating btn btn-default btn-lg" data-attr="5" id="rating-star-5" value="5" onclick="">
+                    <button name="rate" type="submit" class="btnrating btn btn-default btn-lg" data-attr="5"
+                        id="rating-star-5" value="5" onclick="">
                         <i class="fa fa-star" aria-hidden="true"></i>
                     </button>
                 </div>
