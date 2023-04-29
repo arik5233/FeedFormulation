@@ -76,7 +76,7 @@ endif %} {% block head %}
                 <b>Rating: </b>
             </label>
 
-            <p class="form-control" id="rating">{{obj.rating}}</p>
+            <p class="form-control" id="rating">{{ "%0.2f" | format(obj.rating | float) }}</p>
 
             <button class="btn btn-secondary" type="button" id="rating_btn" onclick="ratingg()">
                 Review
@@ -89,7 +89,7 @@ endif %} {% block head %}
                         <span class="field-label-info"></span>
                         <input type="hidden" id="selected_rating" name="selected_rating" value="0" required="required">
                     </label>
-                    <h2 class="bold rating-header" style="">
+                    <h2 class="bold rating-header">
                         <span class="selected-rating">0</span><small> / 5</small>
                     </h2>
                     <button name="rate" type="submit" class="btnrating btn btn-default btn-lg" data-attr="1"

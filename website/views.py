@@ -1,8 +1,9 @@
-from flask import Blueprint, render_template , request, flash, redirect, url_for
+from flask import Blueprint, render_template , request, flash, redirect, url_for, jsonify
 from flask_login import login_required, current_user
 from .models import User
 from . import db
 from .calculate import calculate_feed
+import asyncio
 import json
 
 nutrients_quantity_dict = {}
@@ -10,15 +11,20 @@ nutrients_quantity_dict['hen'] = json.load(open('nutrients_quantity_dict.txt'))
 
 views = Blueprint('views', __name__)
 
-@views.route('/')
+@views.route('/', methods=['GET', 'POST'])
 @login_required
 def home():
     name = current_user.first_name
     users = User.query.all()
+    if request.method == 'POST':
+        target_id = int(request.form.get('search')[0])
+        print(target_id)
+        return redirect(url_for('views.user_profile', id=target_id))
+        # return redirect(url_for('views.user_profile', s_id))
     return render_template("home.html", user=current_user, name=name, users=users)
 
 @views.route('/calculate', methods=['GET', 'POST'])
-def calculate():
+async def calculate():
     global available_feeds, result, length, prices, animal
     
 # 'peaking', 'layer_2', 'layer_3', 'layer_4', 'layer_5'
@@ -52,7 +58,7 @@ def calculate():
             elif 72 < age <= 100:
                 kind = 'layer_5'
             
-            result, length = calculate_feed(kind, available_feeds)
+            result, length = await calculate_feed(kind, available_feeds)
             
             print(available_feeds, prices)
             flash('Calculation completed Successfully!', category='success')
@@ -104,18 +110,36 @@ def profile():
 @views.route('/vet/<int:id>', methods=['GET', 'POST'])
 @login_required
 def user_profile(id):
-    user = User.query.filter_by(id=id).first()
-    if user==current_user:
+    target_user = User.query.filter_by(id=id).first()
+
+    if target_user==current_user:
         return redirect(url_for('views.profile'))
     # if method is post, then retrieve the rating
     if request.method == 'POST':
-        rating = request.form.get('rate')
+        new_rating = request.form.get('rate')
         # add rating to the user
-        user.rating = int(rating)
-        db.session.commit()
-        flash('Review Submitted Successfully!', category='success')
-        return render_template("wall_norating.html", user=current_user, name=current_user.first_name, obj=user)
-        # return redirect(url_for('views.user_profile', user=current_user, name=current_user.first_name, obj=user))
+        if new_rating != None:
 
-        
-    return render_template("wall.html", user=current_user, name=current_user.first_name, obj=user)
+            target_user.rating_count += 1
+            total_rating = target_user.rating_sum + float(new_rating)
+            calculated_rating = total_rating / int(target_user.rating_count)
+            target_user.rating_sum = total_rating
+            target_user.rating = calculated_rating
+            
+            db.session.commit()
+            flash(f'Review submitted successfully with { new_rating } stars.', category='success')
+            return render_template("wall_norating.html", user=current_user, name=current_user.first_name, obj=target_user)
+        # return redirect(url_for('views.user_profile', user=current_user, name=current_user.first_name, obj=user))
+    return render_template("wall.html", user=current_user, name=current_user.first_name, obj=target_user)
+
+
+@views.route('/search')
+def search():
+    search_query = request.args.get('id')
+
+    result = User.query.filter_by(id=search_query).first()
+
+    if result:
+        return jsonify({'id': result.id, 'name': result.name + result.last_name, 'address': result.address, 'contact_num': result.contact_num, 'rating': result.rating})
+    else:
+        return jsonify({'error': 'ID not found'})

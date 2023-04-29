@@ -10,4 +10,6 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(200))
     contact_num = db.Column(db.String(11))
     address = db.Column(db.String(500))
-    rating = db.Column(db.Integer, default=0)
+    rating_count = db.Column(db.Integer, default=0)
+    rating_sum = db.Column(db.Integer, default=0)
+    rating = db.Column(db.Float, default=0)

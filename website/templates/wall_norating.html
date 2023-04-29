@@ -35,7 +35,7 @@ endif %} {% block head %}
                 <b>Rating: </b>
             </label>
 
-            <p class="form-control" id="rating">{{obj.rating}}</p>
+            <p class="form-control" id="rating">{{ "%0.2f" | format(obj.rating | float) }}</p>
             <br /><br />
         </fieldset>
     </div>
